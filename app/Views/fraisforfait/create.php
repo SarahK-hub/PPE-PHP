@@ -10,12 +10,8 @@
 <head>
     <meta charset="UTF-8">
     <title><?= htmlspecialchars($title ?? 'Créer un frais forfait', ENT_QUOTES, 'UTF-8'); ?></title>
-    <style>
-        .error { color: red; }
-        .flash { background: #eef; padding: .5rem 1rem; margin-bottom: 1rem; border: 1px solid #99c; }
-        .field { margin-bottom: 1rem; }
-        label { display: block; margin-bottom: .3rem; }
-    </style>
+    <link rel="stylesheet" href="../public/css/app.css">
+    
 </head>
 <body>
 

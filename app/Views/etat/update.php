@@ -10,12 +10,8 @@
 <head>
     <meta charset="UTF-8">
     <title><?= htmlspecialchars($title ?? 'Modifier un état', ENT_QUOTES, 'UTF-8'); ?></title>
-    <style>
-        .error { color: red; }
-        .flash { background: #eef; padding: .5rem 1rem; margin-bottom: 1rem; border: 1px solid #99c; }
-        .field { margin-bottom: 1rem; }
-        label { display: block; margin-bottom: .3rem; }
-    </style>
+    <link rel="stylesheet" href="/PPE-main/public/css/app.css">
+    
 </head>
 <body>
 
@@ -27,7 +23,7 @@
         </div>
     <?php endif; ?>
 
-      <form method="post">
+      <form method="post" action="./fraisforfait/<?= $fraisforfait['id'] ?>/update">
         <div class="field">
             <label for="libelle">Libellé</label>
             <input

@@ -1,5 +1,10 @@
 # Redirige toutes les requêtes vers index.php sauf fichiers/dossiers existants
 RewriteEngine On
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
+
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
 RewriteRule ^ index.php [QSA,L]

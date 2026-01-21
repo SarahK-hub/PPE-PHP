@@ -1,0 +1,185 @@
+/* =================== GLOBAL =================== */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f2f5;
+    color: #2c3e50;
+    margin: 0;
+    padding: 0 20px;
+}
+
+/* =================== TOPBAR =================== */
+.topbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.topbar h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    flex: 1;
+}
+
+a.button {
+    padding: 8px 14px;
+    background-color: #3498db;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 6px;
+    border: none;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+a.button:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+}
+
+/* =================== FLASH MESSAGES =================== */
+.flash {
+    padding: 10px 15px;
+    margin: 15px 0;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+.flash-success {
+    background-color: #2ecc71;
+    color: #fff;
+}
+
+.flash-error {
+    background-color: #e74c3c;
+    color: #fff;
+}
+
+/* =================== TABLE =================== */
+table {
+    width: 100%;
+    max-width: 1000px;
+    border-collapse: collapse;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    background-color: #fff;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+}
+
+th {
+    background-color: #3498db;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f6fc;
+}
+
+tr:hover {
+    background-color: #d6eaf8;
+}
+
+td a {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+td a:hover {
+    text-decoration: underline;
+}
+
+/* =================== FORM =================== */
+form {
+    max-width: 500px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    margin-bottom: 30px;
+}
+
+.field {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="number"],
+textarea {
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+
+input:focus,
+textarea:focus {
+    outline: none;
+    border-color: #3498db;
+}
+
+/* =================== BOUTONS =================== */
+button, input[type="submit"], a.button {
+    display: inline-block;
+    padding: 10px 16px;
+    border-radius: 6px;
+    border: none;
+    background-color: #3498db;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+button:hover, input[type="submit"]:hover, a.button:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+}
+
+/* =================== ERRORS =================== */
+.error {
+    color: #e74c3c;
+    font-size: 0.9rem;
+    margin-top: 4px;
+}
+
+/* =================== RESPONSIVE =================== */
+@media (max-width: 600px) {
+    .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    table, th, td {
+        font-size: 0.9rem;
+    }
+
+    input, button, a.button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    td a {
+        display: inline-block;
+        margin-bottom: 5px;
+    }
+}

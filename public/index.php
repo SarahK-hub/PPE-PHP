@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 session_start();
 
@@ -60,13 +61,45 @@ if (preg_match('#^/etat/([0-9]+)/delete$#', $requestPath, $m)) {
 }
 
 // ------------------ Routes FraisForfait ------------------
-$router->get('/fraisforfait', [Controllers\fraisforfaitController::class, 'index']);
+//CREATE
 $router->get('/fraisforfait/create', [Controllers\fraisforfaitController::class, 'create']);
 $router->post('/fraisforfait/store', [Controllers\fraisforfaitController::class, 'store']);
+
+//INDEX
+$router->get('/fraisforfait', [Controllers\fraisforfaitController::class, 'index']);
+$router->get('/fraisforfait/', [Controllers\fraisforfaitController::class, 'index']);
+
+// SHOW et UPDATE fallback manuel
+$method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+
+// SHOW
 if (preg_match('#^/fraisforfait/([0-9]+)$#', $requestPath, $m)) {
     (new \Controllers\fraisforfaitController)->show((int)$m[1]);
     exit;
 }
+
+
+// UPDATE
+if (preg_match('#^/fraisforfait/([0-9]+)/update$#', $requestPath, $m)) {
+    $ctrl = new \Controllers\fraisforfaitController;
+    if ($method === 'GET') {
+        $ctrl->update((int)$m[1]);
+    } elseif ($method === 'POST') {
+        $ctrl->save((int)$m[1]);
+    }
+    exit;
+}
+
+// DELETE
+if (preg_match('#^/fraisforfait/([0-9]+)/delete$#', $requestPath, $m)) {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        (new \Controllers\fraisforfaitController)->delete((int)$m[1]);
+    }
+    exit;
+}
+
+
+
 
 // ------------------ Routes Visiteur ------------------
 $router->get('/visiteur', [Controllers\visiteurController::class, 'index']);

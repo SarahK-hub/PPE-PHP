@@ -2,18 +2,12 @@
 <!doctype html>
 <html lang="fr">
 <head>
+    
     <meta charset="utf-8">
     <title><?= htmlspecialchars($title ?? 'États') ?></title>
+    <link rel="stylesheet" href="../css/app.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;margin:24px;}
-        table{border-collapse:collapse;width:100%;max-width:900px;}
-        th,td{border:1px solid #ddd;padding:8px;text-align:left;}
-        th{background:#f6f6f6;}
-        .topbar{margin-bottom:16px;display:flex;gap:12px;align-items:center;}
-        .flash{color:#b30000;margin:8px 0;}
-        a.button{display:inline-block;padding:6px 10px;border:1px solid #ccc;border-radius:6px;text-decoration:none;}
-    </style>
+    
 </head>
 <body>
     <div class="topbar">
@@ -49,7 +43,7 @@
             <a href="./etat/<?= (int)$etat['id'] ?>/update">Modifier</a>
 
             <form method="post"
-                  action="./etat/<?= (int)$etat['id'] ?>/delete"
+                  action="./<?= (int)$etat['id'] ?>/delete"
                   style="display:inline"
                   onsubmit="return confirm('Voulez-vous vraiment supprimer cet état ?');">
                 <button type="submit">Supprimer</button>

@@ -8,14 +8,11 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    
     <meta charset="UTF-8">
     <title><?= htmlspecialchars($title ?? 'Créer un état', ENT_QUOTES, 'UTF-8'); ?></title>
-    <style>
-        .error { color: red; }
-        .flash { background: #eef; padding: .5rem 1rem; margin-bottom: 1rem; border: 1px solid #99c; }
-        .field { margin-bottom: 1rem; }
-        label { display: block; margin-bottom: .3rem; }
-    </style>
+    <link rel="stylesheet" href="/PPE-main/public/css/app.css">
+    
 </head>
 <body>
 

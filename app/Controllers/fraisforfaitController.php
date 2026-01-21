@@ -40,7 +40,7 @@ final class fraisforfaitController extends Controller
             $fraisforfait = \Models\fraisforfait::findById($id);
             if (!$fraisforfait) {
                 http_response_code(404);
-                $_SESSION['flash'] = 'État introuvable.';
+                $_SESSION['flash'] = 'frais forfait introuvable.';
                 $this->redirect('/fraisforfait');
             }
         } catch (\Throwable $e) {
@@ -111,6 +111,84 @@ public function create(): void
         $_SESSION['flash'] = 'Impossible de créer le frais forfait.';
         $this->redirect('./fraisforfait/create');
     }
+}
+ public function update(int $id): void
+{
+    if (empty($_SESSION['uid'])) {
+        $this->redirect('/');
+    }
+
+    $fraisforfait = fraisforfait::findById($id);
+
+    if (!$fraisforfait) {
+        $_SESSION['flash'] = 'frais forfait introuvable.';
+        $this->redirect('./fraisforfait');
+    }
+
+    $this->render('fraisforfait/update', [
+    'title' => 'Modifier un frais forfait',
+    'fraisforfait'  => $fraisforfait,
+    'old' => $_SESSION['old'] ?? [
+    'libelle' => $fraisforfait['libelle'],
+    'montant' => $fraisforfait['montant'],
+],
+
+    'errors'=> $_SESSION['errors'] ?? [],
+    'message'=> $_SESSION['flash'] ?? '',
+]);
+
+    unset($_SESSION['flash'], $_SESSION['old'], $_SESSION['errors']);
+}
+
+    
+    public function save(int $id): void
+    {
+        if (empty($_SESSION['uid'])) {
+            $this->redirect('/');
+        }
+
+        $libelle = trim($_POST['libelle'] ?? '');
+        $montant = trim($_POST['montant'] ?? '');
+        $errors  = [];
+
+        if ($libelle === ''|| $montant==='') {
+            $errors['libelle'] = 'Le libellé et le montant sont obligatoires.';
+        } elseif (mb_strlen($libelle) > 100) {
+            $errors['libelle'] = 'Le libellé ne doit pas dépasser 100 caractères.';
+        }
+
+        if (!empty($errors)) {
+            $_SESSION['errors'] = $errors;
+            $_SESSION['old']    = ['libelle' => $libelle];
+            $_SESSION['old']    = ['montant' => $montant];
+            $_SESSION['flash']  = 'Merci de corriger les erreurs du formulaire.';
+            $this->redirect('./fraisforfait/' . $id . '/update');
+        }
+
+        try {
+            \Models\fraisforfait::update( $id,$libelle,$montant);
+
+            $_SESSION['flash'] = 'frais forfait modifié avec succès.';
+            $this->redirect('./fraisforfait/' . $id);
+        } catch (\Throwable $e) {
+            $_SESSION['flash'] = 'Impossible de modifier le frais forfait.';
+            $this->redirect('./fraisforfait/' . $id . '/update');
+        }
+    }
+     public function delete(int $id): void
+{
+        if (empty($_SESSION['uid'])) {
+        $this->redirect('/');
+    }
+
+    try {
+       fraisforfait::delete($id);
+        $_SESSION['flash'] = 'frais forfait supprimé avec succès.';
+    } catch (\Throwable $e) {
+        $_SESSION['flash'] = 'Impossible de supprimer le frais forfait.';
+    }
+
+    $this->redirect('./fraisforfait');
 }
  
 

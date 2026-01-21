@@ -3,12 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title><?= htmlspecialchars($title ?? 'frais forfait') ?></title>
-    <style>
-        body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;margin:24px;}
-        .card{border:1px solid #ddd;padding:16px;border-radius:8px;max-width:400px;}
-        a.button{display:inline-block;margin-top:12px;padding:6px 10px;border:1px solid #ccc;border-radius:6px;text-decoration:none;}
-        .flash{color:#b30000;margin-bottom:10px;}
-    </style>
+    <link rel="stylesheet" href="/PPE-main/public/css/app.css">
 </head>
 <body>
     <h1>Détail du frais forfait</h1>

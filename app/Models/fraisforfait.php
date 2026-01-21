@@ -29,23 +29,36 @@ final class fraisforfait{
             'montant' => $montant
         ]);
     }
-     public static function update(int $id, string $libelle,): bool
+     public static function update(int $id, string $libelle, float $montant): bool
+{
+    $pdo = Database::get();
+
+    $sql = "UPDATE fraisforfait
+            SET libelle = :libelle,
+                montant = :montant
+            WHERE id = :id";
+
+    $stmt = $pdo->prepare($sql);
+
+    return $stmt->execute([
+        'id'      => $id,
+        'libelle' => $libelle,
+        'montant' => $montant,
+    ]);
+
+}
+ public static function delete(int $id): bool
     {
         $pdo = Database::get();
 
-        $sql = "UPDATE etat 
-                SET libelle = :libelle
-                SET montant =:montant 
+        $sql = "DELETE FROM fraisforfait
                 WHERE id = :id";
 
         $stmt = $pdo->prepare($sql);
 
         return $stmt->execute([
-            'id'      => $id,
-            'libelle' => $libelle,
+            'id'      => $id
         ]);
     }
-
-
     
 }
