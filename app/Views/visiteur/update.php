@@ -1,6 +1,6 @@
 <?php
 // Variables disponibles :
-// $title   : titre de la page ("Créer un fraisforfait")
+// $title   : titre de la page ("Créer un frais forfait")
 // $message : message flash éventuel
 // $old     : valeurs précédentes du formulaire (['libelle' => '...'])
 // $errors  : erreurs de validation (['libelle' => '...'])
@@ -9,7 +9,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title><?= htmlspecialchars($title ?? 'Créer un frais forfait', ENT_QUOTES, 'UTF-8'); ?></title>
+    <title><?= htmlspecialchars($title ?? 'Modifier un frais forfait', ENT_QUOTES, 'UTF-8'); ?></title>
     
     <style>
 body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#f0f2f5;color:#2c3e50;margin:0;padding:0 20px}
@@ -48,54 +48,55 @@ td a{display:inline-block;margin-bottom:5px}
 }
 </style>
 
+<head>
+    <meta charset="UTF-8">
+    <title><?= htmlspecialchars($title) ?></title>
 </head>
 <body>
 
-    <h1><?= htmlspecialchars($title ?? 'Créer un fraisforfait', ENT_QUOTES, 'UTF-8'); ?></h1>
+<h1>Modifier le visiteur</h1>
 
-    <?php if (!empty($message)): ?>
-    <div class="flash">
-        <?= htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>
-    </div>
+<?php if (!empty($message)): ?>
+    <div class="flash"><?= htmlspecialchars($message) ?></div>
 <?php endif; ?>
-<form action="<?= BASE_URL ?>fraisforfait/store" method="post">
+
+<form method="post" action="<?= BASE_URL ?>visiteur/<?= $visiteur['ID'] ?>/update">
 
 
-    <div class="field">
-        <label for="libelle">Libellé</label>
-        <input
-            type="text"
-            name="libelle"
-            id="libelle"
-            value="<?= htmlspecialchars($old['libelle'] ?? '', ENT_QUOTES, 'UTF-8'); ?>"
-            required
-        >
-        <?php if (!empty($errors['libelle'])): ?>
-            <div class="error">
-                <?= htmlspecialchars($errors['libelle'], ENT_QUOTES, 'UTF-8'); ?>
-            </div>
-        <?php endif; ?>
-    </div>
+    <label>Nom</label>
+    <input type="text" name="nom"
+           value="<?= htmlspecialchars($old['NOM'] ?? $old['nom'] ?? '') ?>">
+    <?= $errors['nom'] ?? '' ?><br>
 
-    <div class="field">
-        <label for="montant">Montant</label>
-        <input
-            type="number"
-            name="montant"
-            id="montant"
-            step="0.01"
-            value="<?= htmlspecialchars($old['montant'] ?? '', ENT_QUOTES, 'UTF-8'); ?>"
-            required
-        >
-        <?php if (!empty($errors['montant'])): ?>
-            <div class="error">
-                <?= htmlspecialchars($errors['montant'], ENT_QUOTES, 'UTF-8'); ?>
-            </div>
-        <?php endif; ?>
-    </div>
+    <label>Prénom</label>
+    <input type="text" name="prenom"
+           value="<?= htmlspecialchars($old['PRENOM'] ?? $old['prenom'] ?? '') ?>">
+    <?= $errors['prenom'] ?? '' ?><br>
+
+    <label>Adresse</label>
+    <input type="text" name="adresse"
+           value="<?= htmlspecialchars($old['ADRESSE'] ?? $old['adresse'] ?? '') ?>"><br>
+
+    <label>Ville</label>
+    <input type="text" name="ville"
+           value="<?= htmlspecialchars($old['VILLE'] ?? $old['ville'] ?? '') ?>"><br>
+
+    <label>Code postal</label>
+    <input type="text" name="CP"
+           value="<?= htmlspecialchars($old['CP'] ?? '') ?>">
+    <?= $errors['CP'] ?? '' ?><br>
+
+    <label>Date embauche</label>
+    <input type="date" name="date_embauche"
+           value="<?= htmlspecialchars($old['DATE_EMBAUCHE'] ?? '') ?>"><br>
+
+    <label>Login</label>
+    <input type="text" name="login"
+           value="<?= htmlspecialchars($old['LOGIN'] ?? '') ?>"><br>
 
     <button type="submit">Enregistrer</button>
-    <a href="<?= BASE_URL ?>fraisforfait">Annuler</a>
+    <a href="<?= BASE_URL ?>visiteur">Annuler</a>
+
 </form>
 
 </body>

@@ -1,9 +1,10 @@
+
 <!doctype html>
 <html lang="fr">
 <head>
     <meta charset="utf-8">
-    <title><?= htmlspecialchars($title ?? 'État') ?></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?= htmlspecialchars($title ?? 'frais hors forfait') ?></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
 body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#f0f2f5;color:#2c3e50;margin:0;padding:0 20px}
 
@@ -40,25 +41,58 @@ input,button,a.button{width:100%;margin-bottom:10px}
 td a{display:inline-block;margin-bottom:5px}
 }
 </style>
->
-    
+
+   
 </head>
 <body>
-    <h1>Détail de l’état</h1>
+    <div class="topbar">
+        <h1 style="margin:0;">Liste des frais hors forfaits</h1>
+        <a class="button" href="./dashboard">Dashboard</a>
+        <a class="button" href="./logout">Se déconnecter</a>
+        <a class="button" href="<?= BASE_URL ?>frais_hors_forfait/create">Inserer</a>
+        
+    </div>
 
     <?php if (!empty($message)): ?>
         <div class="flash"><?= htmlspecialchars($message) ?></div>
     <?php endif; ?>
 
-    <?php if (!empty($etat)): ?>
-        <div class="card">
-            <p><strong>ID :</strong> <?= htmlspecialchars($etat['id']) ?></p>
-            <p><strong>Libellé :</strong> <?= htmlspecialchars($etat['libelle']) ?></p>
-        </div>
-        <a class="button" href="<?= BASE_URL ?>etat">⬅ Retour à la liste</a>
+    <?php if (empty($frais_hors_forfaits)): ?>
+        <p>Aucun frais hors forfait trouvé.</p>
     <?php else: ?>
-        <p>État introuvable.</p>
-        <a class="button" href="../etat">Retour à la liste</a>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Libellé</th>
+                    <th>montant</th>
+                    <th>action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($frais_hors_forfaits as $frais): ?>
+                    <tr>
+                        <td><?= htmlspecialchars((string)$frais['id']) ?></td>
+                        <td><?= htmlspecialchars((string)$frais['libelle']) ?></td>
+                        <td><?= htmlspecialchars((string)$frais['montant']) ?></td>
+                        <td>
+                        <a class="button" href="<?= BASE_URL ?>frais_hors_forfait/<?= $frais['id'] ?>">Voir</a>
+                        <a class="button" href="<?= BASE_URL ?>frais_hors_forfait/<?= $frais['id'] ?>/update">Modifier</a>
+
+                        <form method="post"
+                        action="<?= BASE_URL ?>frais_hors_forfait/<?= (int)$frais['id'] ?>/delete"
+                        style="display:inline"
+                        onsubmit="return confirm('Voulez-vous vraiment supprimer ce frais hors forfait ?');">
+                        <button type="submit">Supprimer</button>
+    </form>
+</td>
+                              
+                            
+                        
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
     <?php endif; ?>
 </body>
 </html>

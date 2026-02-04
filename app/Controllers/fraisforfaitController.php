@@ -28,6 +28,7 @@ final class fraisforfaitController extends Controller
         ]);
         unset($_SESSION['flash']);
     }
+    
 
 
     public function show($id): void

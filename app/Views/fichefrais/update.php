@@ -1,9 +1,8 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="utf-8">
-    <title><?= htmlspecialchars($title ?? 'État') ?></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title><?= htmlspecialchars($title ?? 'Modifier fiche de frais') ?></title>
     <style>
 body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#f0f2f5;color:#2c3e50;margin:0;padding:0 20px}
 
@@ -40,25 +39,40 @@ input,button,a.button{width:100%;margin-bottom:10px}
 td a{display:inline-block;margin-bottom:5px}
 }
 </style>
->
-    
+
 </head>
 <body>
-    <h1>Détail de l’état</h1>
 
-    <?php if (!empty($message)): ?>
-        <div class="flash"><?= htmlspecialchars($message) ?></div>
-    <?php endif; ?>
+<h1><?= htmlspecialchars($title ?? 'Modifier fiche de frais') ?></h1>
 
-    <?php if (!empty($etat)): ?>
-        <div class="card">
-            <p><strong>ID :</strong> <?= htmlspecialchars($etat['id']) ?></p>
-            <p><strong>Libellé :</strong> <?= htmlspecialchars($etat['libelle']) ?></p>
-        </div>
-        <a class="button" href="<?= BASE_URL ?>etat">⬅ Retour à la liste</a>
-    <?php else: ?>
-        <p>État introuvable.</p>
-        <a class="button" href="../etat">Retour à la liste</a>
-    <?php endif; ?>
+<?php if (!empty($message)): ?>
+    <div class="flash"><?= htmlspecialchars($message) ?></div>
+<?php endif; ?>
+
+<form method="post"
+      action="<?= BASE_URL ?>fichefrais/<?= $fiche['mois'] ?>/update">
+
+    <div class="field">
+        <label>Nombre de justificatifs</label>
+        <input type="number" name="nbrJustificatifs"
+               value="<?= htmlspecialchars($old['nbrJustificatifs'] ?? '') ?>" required>
+    </div>
+
+    <div class="field">
+        <label>Montant validé</label>
+        <input type="number" step="0.01" name="montantValide"
+               value="<?= htmlspecialchars($old['montantValide'] ?? '') ?>" required>
+    </div>
+
+    <div class="field">
+        <label>État</label>
+        <input type="number" name="idEtat"
+               value="<?= htmlspecialchars($old['idEtat'] ?? '') ?>" required>
+    </div>
+
+    <button type="submit">Enregistrer</button>
+    <a class="button" href="<?= BASE_URL ?>fichefrais">Annuler</a>
+</form>
+
 </body>
 </html>

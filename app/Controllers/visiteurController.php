@@ -6,41 +6,40 @@ use Models\visiteur;
 
 final class visiteurController extends Controller
 {
-    public function index(): void
-    {
-        if (empty($_SESSION['uid'])) {
-            $this->redirect('/');
-        }
-
-        // 🆕 Récupération critère de recherche
-        $search = trim($_GET['q'] ?? '');
-$search = str_replace(['%', '_'], ['\%', '\_'], $search); // échappe les jokers
-$searchLike = "%$search%";
-
-        try {
-            // 🆕 Si recherche → filtrer
-            if ($search !== '') {
-                $visiteurs = visiteur::findBySearch($search);
-            } else {
-                $visiteurs = visiteur::findAll();
-            }
-        } catch (\Throwable $e) {
-            $_SESSION['flash'] = 'Impossible de charger les visiteurs.';
-            var_dump($visiteurs);
-            $visiteurs = [];
-            
-        }
-
-        $this->render('visiteur/index', [
-            'title'     => 'Liste des visiteurs',
-            'visiteurs' => $visiteurs,
-            'search'    => $search, // 🆕 pour réafficher la recherche
-            'message'   => $_SESSION['flash'] ?? '',
-        ]);
-
-        unset($_SESSION['flash']);
+ public function index(): void
+{
+    // 🚫 Vérifie si l'utilisateur est connecté
+    if (empty($_SESSION['uid'])) {
+        $this->redirect('/');
     }
 
+    // 🆕 Récupération du critère de recherche
+    $search = trim($_GET['q'] ?? '');
+
+    try {
+        // Si recherche → filtrer
+        if ($search !== '') {
+            $visiteurs = visiteur::findBySearch($search);
+        } else {
+            $visiteurs = visiteur::findAll();
+        }
+    } catch (\Throwable $e) {
+        // On stocke l'erreur dans le flash et on renvoie un tableau vide
+        $_SESSION['flash'] = 'Impossible de charger les visiteurs : ' . $e->getMessage();
+        $visiteurs = [];
+    }
+
+    // 🖥️ Affichage de la vue
+    $this->render('visiteur/index', [
+        'title'     => 'Liste des visiteurs',
+        'visiteurs' => $visiteurs,
+        'search'    => $search,           // pour réafficher la recherche dans le champ
+        'message'   => $_SESSION['flash'] ?? '',
+    ]);
+
+    // 🔥 On vide le flash
+    unset($_SESSION['flash']);
+}
 
     public function show($id): void
     {
@@ -193,6 +192,83 @@ $searchLike = "%$search%";
         $_SESSION['flash'] = 'Impossible de créer le visiteur.';
         $this->redirect('/visiteur/create');
     }
+}
+public function update(int $id): void
+{
+    if (empty($_SESSION['uid'])) {
+        $this->redirect('/');
+    }
+
+    $visiteur = visiteur::findById($id);
+
+    if (!$visiteur) {
+        $_SESSION['flash'] = 'Visiteur introuvable.';
+        $this->redirect('/visiteur');
+    }
+
+    $this->render('visiteur/update', [
+        'title'    => 'Modifier un visiteur',
+        'visiteur' => $visiteur,
+        'old'      => $_SESSION['old'] ?? $visiteur,
+        'errors'   => $_SESSION['errors'] ?? [],
+        'message'  => $_SESSION['flash'] ?? '',
+    ]);
+
+    unset($_SESSION['flash'], $_SESSION['old'], $_SESSION['errors']);
+}
+public function save(int $id): void
+{
+    if (empty($_SESSION['uid'])) {
+        $this->redirect('/');
+    }
+
+    $nom           = trim($_POST['nom'] ?? '');
+    $prenom        = trim($_POST['prenom'] ?? '');
+    $adresse       = trim($_POST['adresse'] ?? '');
+    $ville         = trim($_POST['ville'] ?? '');
+    $CP            = trim($_POST['CP'] ?? '');
+    $date_embauche = trim($_POST['date_embauche'] ?? '');
+    $login         = trim($_POST['login'] ?? '');
+
+    $errors = [];
+
+    if ($nom === '')    $errors['nom'] = 'Nom obligatoire';
+    if ($prenom === '') $errors['prenom'] = 'Prénom obligatoire';
+    if ($CP === '' || !preg_match('/^\d{5}$/', $CP)) {
+        $errors['CP'] = 'Code postal invalide';
+    }
+
+    if (!empty($errors)) {
+        $_SESSION['errors'] = $errors;
+        $_SESSION['old'] = compact(
+            'nom','prenom','adresse','ville','CP','date_embauche','login'
+        );
+        $this->redirect("/visiteur/$id/update");
+    }
+
+    visiteur::update(
+        $id,
+        $nom,
+        $prenom,
+        $adresse,
+        $ville,
+        $CP,
+        $date_embauche,
+        $login
+    );
+
+    $_SESSION['flash'] = 'Visiteur modifié avec succès.';
+    $this->redirect("/visiteur/$id");
+}
+public function delete(int $id): void
+{
+    if (empty($_SESSION['uid'])) {
+        $this->redirect('/');
+    }
+
+    visiteur::delete($id);
+    $_SESSION['flash'] = 'Visiteur supprimé.';
+    $this->redirect('/visiteur');
 }
 
 

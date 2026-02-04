@@ -20,33 +20,31 @@ final class visiteur {
         return $row ?: null;
     }
 
-    /* 🆕 Recherche filtrée */
-    public static function findBySearch(string $search): array
+ public static function findBySearch(string $search): array
 {
     $pdo = Database::get();
 
-    // Nettoyage de la recherche pour éviter les espaces inutiles
-    $search = trim($search);
-
-    // On ajoute les jokers pour le LIKE
+    // Nettoyage de la recherche
+    $search = trim(preg_replace('/\s+/', ' ', $search));
     $searchLike = '%' . $search . '%';
 
-    // Requête SQL avec insensibilité à la casse
+    // Requête SQL avec insensibilité à la casse et aux accents
     $sql = "
         SELECT ID, NOM, PRENOM, ADRESSE, VILLE, CP, DATE_EMBAUCHE
         FROM visiteur
-        WHERE NOM LIKE :s
-           OR PRENOM LIKE :s
+        WHERE NOM LIKE :s1 COLLATE utf8mb4_general_ci
+           OR PRENOM LIKE :s2 COLLATE utf8mb4_general_ci
     ";
 
     $st = $pdo->prepare($sql);
-  $st->bindValue(':s', $searchLike, \PDO::PARAM_STR);
-  $st->execute();
+    $st->bindValue(':s1', $searchLike, \PDO::PARAM_STR);
+    $st->bindValue(':s2', $searchLike, \PDO::PARAM_STR);
+    $st->execute();
 
-
-    // Retourner un tableau associatif
     return $st->fetchAll(\PDO::FETCH_ASSOC);
 }
+
+
 public static function create( string $nom, string $prenom,string $adresse, string $ville, string $CP,string $date_embauche,string $login,string $mdp
 ): bool
 {
@@ -71,6 +69,52 @@ public static function create( string $nom, string $prenom,string $adresse, stri
 
     ]);
 }
+public static function update(
+    int $id,
+    string $nom,
+    string $prenom,
+    string $adresse,
+    string $ville,
+    string $CP,
+    string $date_embauche,
+    string $login
+): bool {
+    $pdo = Database::get();
+
+    $sql = "
+        UPDATE visiteur
+        SET nom = :nom,
+            prenom = :prenom,
+            adresse = :adresse,
+            ville = :ville,
+            CP = :CP,
+            date_embauche = :date_embauche,
+            login = :login
+        WHERE id = :id
+    ";
+
+    $stmt = $pdo->prepare($sql);
+
+    return $stmt->execute([
+        'id'            => $id,
+        'nom'           => $nom,
+        'prenom'        => $prenom,
+        'adresse'       => $adresse,
+        'ville'         => $ville,
+        'CP'            => $CP,
+        'date_embauche' => $date_embauche,
+        'login'         => $login,
+    ]);
+}
+
+public static function delete(int $id): bool
+{
+    $pdo = Database::get();
+
+    $stmt = $pdo->prepare("DELETE FROM visiteur WHERE id = :id");
+    return $stmt->execute(['id' => $id]);
+}
+
 
 }
 

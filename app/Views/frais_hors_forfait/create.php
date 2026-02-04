@@ -1,6 +1,6 @@
 <?php
 // Variables disponibles :
-// $title   : titre de la page ("Créer un fraisforfait")
+// $title   : titre de la page ("Créer un frais_hors _forfait")
 // $message : message flash éventuel
 // $old     : valeurs précédentes du formulaire (['libelle' => '...'])
 // $errors  : erreurs de validation (['libelle' => '...'])
@@ -9,7 +9,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title><?= htmlspecialchars($title ?? 'Créer un frais forfait', ENT_QUOTES, 'UTF-8'); ?></title>
+    <title><?= htmlspecialchars($title ?? 'Créer un frais hors forfait', ENT_QUOTES, 'UTF-8'); ?></title>
     
     <style>
 body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#f0f2f5;color:#2c3e50;margin:0;padding:0 20px}
@@ -51,14 +51,31 @@ td a{display:inline-block;margin-bottom:5px}
 </head>
 <body>
 
-    <h1><?= htmlspecialchars($title ?? 'Créer un fraisforfait', ENT_QUOTES, 'UTF-8'); ?></h1>
+    <h1><?= htmlspecialchars($title ?? 'Créer un frais hors forfait', ENT_QUOTES, 'UTF-8'); ?></h1>
 
     <?php if (!empty($message)): ?>
     <div class="flash">
         <?= htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>
     </div>
 <?php endif; ?>
-<form action="<?= BASE_URL ?>fraisforfait/store" method="post">
+<form method="post" action="<?= BASE_URL ?>frais_hors_forfait/store">
+
+
+    <div class="field">
+        <label for="date_frais">date</label>
+        <input
+            type="date"
+            name="date_frais"
+            id="date_frais"
+            value="<?= htmlspecialchars($old['date_frais'] ?? '', ENT_QUOTES, 'UTF-8'); ?>"
+            required
+        >
+        <?php if (!empty($errors['date_frais'])): ?>
+            <div class="error">
+                <?= htmlspecialchars($errors['date_frais'], ENT_QUOTES, 'UTF-8'); ?>
+            </div>
+        <?php endif; ?>
+    </div>
 
 
     <div class="field">
@@ -95,7 +112,7 @@ td a{display:inline-block;margin-bottom:5px}
     </div>
 
     <button type="submit">Enregistrer</button>
-    <a href="<?= BASE_URL ?>fraisforfait">Annuler</a>
+    <a href="<?= BASE_URL ?>frais_hors_forfait">Annuler</a>
 </form>
 
 </body>
