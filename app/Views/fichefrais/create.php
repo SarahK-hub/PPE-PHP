@@ -50,43 +50,18 @@ td a{display:inline-block;margin-bottom:5px}
 
 <form method="post" action="<?= BASE_URL ?>fichefrais/store">
 
-    <div class="field">
-        <label for="mois">Mois (AAAAMM)</label>
-        <input type="number" name="mois" id="mois"
-               value="<?= htmlspecialchars($old['mois'] ?? '') ?>" required>
-        <?php if (!empty($errors['mois'])): ?>
-            <div class="error"><?= htmlspecialchars($errors['mois']) ?></div>
-        <?php endif; ?>
-    </div>
+    <label>Mois (YYYYMM)</label>
+    <input type="text" name="mois" placeholder="202402" required>
 
-    <div class="field">
-        <label for="nbrJustificatifs">Nombre de justificatifs</label>
-        <input type="number" name="nbrJustificatifs" id="nbrJustificatifs"
-               value="<?= htmlspecialchars($old['nbrJustificatifs'] ?? '') ?>" required>
-    </div>
+    <label>Nb justificatifs</label>
+    <input type="number" name="nbJustificatifs" required>
 
-    <div class="field">
-        <label for="montantValide">Montant validé</label>
-        <input type="number" step="0.01" name="montantValide" id="montantValide"
-               value="<?= htmlspecialchars($old['montantValide'] ?? '') ?>" required>
-    </div>
+    <label>Montant validé</label>
+    <input type="number" step="0.01" name="montantValide" required>
 
-    <div class="field">
-        <label for="idEtat">État</label>
-        <input type="number" name="idEtat" id="idEtat"
-               value="<?= htmlspecialchars($old['idEtat'] ?? '') ?>" required>
-    </div>
-
-    <div class="field">
-        <label for="idLigneFraisHorsForfait">Ligne frais hors forfait</label>
-        <input type="number" name="idLigneFraisHorsForfait" id="idLigneFraisHorsForfait"
-               value="<?= htmlspecialchars($old['idLigneFraisHorsForfait'] ?? '') ?>">
-    </div>
-
-    <button type="submit">Enregistrer</button>
-    <a class="button" href="<?= BASE_URL ?>fichefrais">Annuler</a>
-
+    <button type="submit">Créer</button>
 </form>
+
 
 </body>
 </html>

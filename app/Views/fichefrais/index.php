@@ -83,9 +83,8 @@ td a{display:inline-block;margin-bottom:5px}
                     <a class="button" href="<?= BASE_URL ?>fichefrais/<?= $fiche['mois'] ?>/update">Modifier</a>
 
                     <form method="post"
-                          action="<?= BASE_URL ?>fichefrais/<?= $fiche['mois'] ?>/delete"
-                          style="display:inline"
-                          onsubmit="return confirm('Supprimer cette fiche ?');">
+                      action="<?= BASE_URL ?>fichefrais/<?= $fiche['IDvisiteur'] ?>/<?= $fiche['mois'] ?>/delete">
+                         
                         <button type="submit">Supprimer</button>
                     </form>
                 </td>
