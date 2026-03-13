@@ -54,14 +54,19 @@ td a{display:inline-block;margin-bottom:5px}
 
     <div class="field">
         <label>Nombre de justificatifs</label>
-        <input type="number" name="nbrJustificatifs"
-               value="<?= htmlspecialchars($old['nbrJustificatifs'] ?? '') ?>" required>
+       <input
+        type="number"
+        name="nbrJustificatifs"
+        value="<?= htmlspecialchars($fiche['nbrJustificatifs']) ?>">
     </div>
 
     <div class="field">
         <label>Montant validé</label>
-        <input type="number" step="0.01" name="montantValide"
-               value="<?= htmlspecialchars($old['montantValide'] ?? '') ?>" required>
+        <input
+            type="number"
+            step="0.01"
+            name="montantValide"
+            value="<?= htmlspecialchars($fiche['montantValide']) ?>">
     </div>
 
     <div class="field">

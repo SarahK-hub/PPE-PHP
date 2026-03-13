@@ -4,68 +4,112 @@ namespace Models;
 use Config\Database;
 use DateTime;
 
-
-  class FicheFrais
+final class fichefrais
 {
-    protected $table = 'fichefrais';
-
-    public function getAll()
+    public static function findAll(): array
     {
-        return $this->db->query(
-            "SELECT ff.*, e.libelle AS etat
-             FROM fichefrais ff
-             JOIN etat e ON ff.idEtat = e.id
-             ORDER BY ff.mois DESC"
-        )->fetchAll();
+        $pdo = Database::get();
+
+        $sql = "
+        SELECT ff.*, e.libelle AS etat
+        FROM fichefrais ff
+        JOIN etat e ON ff.idEtat = e.id
+        ORDER BY ff.mois DESC
+        ";
+
+        return $pdo->query($sql)->fetchAll();
     }
 
-    public function find($idVisiteur, $mois)
+    public static function findById(string $IDvisiteur, string $mois): ?array
     {
-        $stmt = $this->db->prepare(
-            "SELECT * FROM fichefrais WHERE idVisiteur = ? AND mois = ?"
-        );
-        $stmt->execute([$idVisiteur, $mois]);
-        return $stmt->fetch();
+        $pdo = Database::get();
+
+        $stmt = $pdo->prepare("
+        SELECT ff.*, e.libelle AS etat
+        FROM fichefrais ff
+        JOIN etat e ON ff.idEtat = e.id
+        WHERE ff.IDvisiteur = :IDvisiteur
+        AND ff.mois = :mois
+        ");
+
+        $stmt->execute([
+            'IDvisiteur' => $IDvisiteur,
+            'mois' => $mois
+        ]);
+
+        $row = $stmt->fetch();
+
+        return $row ?: null;
     }
 
-    public function create($data)
+    public static function create(
+        string $IDvisiteur,
+        string $mois,
+        int $nbrJustificatifs,
+        float $montantValide,
+        string $idEtat
+    ): bool
     {
-        $stmt = $this->db->prepare(
-            "INSERT INTO fichefrais
-            (idVisiteur, mois, nbJustificatifs, montantValide, dateModif, idEtat)
-            VALUES (?, ?, ?, ?, CURDATE(), ?)"
-        );
+        $pdo = Database::get();
+
+        $stmt = $pdo->prepare("
+        INSERT INTO fichefrais
+        (IDvisiteur, mois, nbrJustificatifs, montantValide, dateModif, idEtat)
+        VALUES
+        (:IDvisiteur, :mois, :nbrJustificatifs, :montantValide, NOW(), :idEtat)
+        ");
 
         return $stmt->execute([
-            $data['idVisiteur'],
-            $data['mois'],
-            $data['nbJustificatifs'],
-            $data['montantValide'],
-            'CR' // état créé
+            'IDvisiteur' => $IDvisiteur,
+            'mois' => $mois,
+            'nbrJustificatifs' => $nbrJustificatifs,
+            'montantValide' => $montantValide,
+            'idEtat' => $idEtat
         ]);
     }
 
-    public function update($data)
+    public static function update(
+        string $IDvisiteur,
+        string $mois,
+        int $nbrJustificatifs,
+        float $montantValide,
+        string $idEtat
+    ): bool
     {
-        $stmt = $this->db->prepare(
-            "UPDATE fichefrais
-             SET nbJustificatifs = ?, montantValide = ?, dateModif = CURDATE()
-             WHERE idVisiteur = ? AND mois = ?"
-        );
+        $pdo = Database::get();
+
+        $stmt = $pdo->prepare("
+        UPDATE fichefrais
+        SET nbrJustificatifs = :nbrJustificatifs,
+            montantValide = :montantValide,
+            idEtat = :idEtat,
+            dateModif = NOW()
+        WHERE IDvisiteur = :IDvisiteur
+        AND mois = :mois
+        ");
 
         return $stmt->execute([
-            $data['nbJustificatifs'],
-            $data['montantValide'],
-            $data['idVisiteur'],
-            $data['mois']
+            'nbrJustificatifs' => $nbrJustificatifs,
+            'montantValide' => $montantValide,
+            'idEtat' => $idEtat,
+            'IDvisiteur' => $IDvisiteur,
+            'mois' => $mois
         ]);
     }
 
-    public function delete($idVisiteur, $mois)
+    public static function delete(string $IDvisiteur, string $mois): bool
     {
-        $stmt = $this->db->prepare(
-            "DELETE FROM fichefrais WHERE idVisiteur = ? AND mois = ?"
-        );
-        return $stmt->execute([$idVisiteur, $mois]);
+        $pdo = Database::get();
+
+        $stmt = $pdo->prepare("
+        DELETE FROM fichefrais
+        WHERE IDvisiteur = :IDvisiteur
+        AND mois = :mois
+        ");
+
+        return $stmt->execute([
+            'IDvisiteur' => $IDvisiteur,
+            'mois' => $mois
+        ]);
     }
 }

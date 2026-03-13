@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="fr">
 <head>
-    <meta charset="utf-8">
-    <title><?= htmlspecialchars($title ?? 'Fiches de frais') ?></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
+<meta charset="utf-8">
+<title><?= htmlspecialchars($title ?? 'Fiches de frais') ?></title>
+
+<style>
 body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#f0f2f5;color:#2c3e50;margin:0;padding:0 20px}
 
 .topbar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:20px 0}
@@ -41,58 +41,98 @@ td a{display:inline-block;margin-bottom:5px}
 }
 </style>
 
-   
-
 </head>
+
 <body>
 
 <div class="topbar">
-    <h1>Liste des fiches de frais</h1>
-    <a class="button" href="<?= BASE_URL ?>dashboard">Dashboard</a>
-    <a class="button" href="<?= BASE_URL ?>logout">Déconnexion</a>
-    <a class="button" href="<?= BASE_URL ?>fichefrais/create">Insérer</a>
+
+<h1 style="flex:1">Fiches de frais</h1>
+
+<a class="button" href="<?= BASE_URL ?>dashboard">Dashboard</a>
+
+<a class="button" href="<?= BASE_URL ?>fichefrais/create">Créer une fiche</a>
+
+<a class="button" href="<?= BASE_URL ?>logout">Déconnexion</a>
+
 </div>
 
-<?php if (!empty($message)): ?>
-    <div class="flash"><?= htmlspecialchars($message) ?></div>
-<?php endif; ?>
+<?php if(empty($fiches)): ?>
 
-<?php if (empty($fiches)): ?>
-    <p>Aucune fiche trouvée.</p>
+<p>Aucune fiche trouvée.</p>
+
 <?php else: ?>
+
 <table>
-    <thead>
-        <tr>
-            <th>Mois</th>
-            <th>Justificatifs</th>
-            <th>Montant</th>
-            <th>État</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach ($fiches as $fiche): ?>
-            <tr>
-                <td><?= htmlspecialchars($fiche['mois']) ?></td>
-                <td><?= htmlspecialchars($fiche['nbrJustificatifs']) ?></td>
-                <td><?= htmlspecialchars($fiche['montantValide']) ?></td>
-                <td><?= htmlspecialchars($fiche['etat_libelle']) ?></td>
 
-                <td>
-                    <a class="button" href="<?= BASE_URL ?>fichefrais/<?= $fiche['mois'] ?>">Voir</a>
-                    <a class="button" href="<?= BASE_URL ?>fichefrais/<?= $fiche['mois'] ?>/update">Modifier</a>
+<thead>
+<tr>
+<th>Visiteur</th>
+<th>Mois</th>
+<th>Justificatifs</th>
+<th>Montant</th>
+<th>Etat</th>
+<th>Actions</th>
+</tr>
+</thead>
 
-                    <form method="post"
-                      action="<?= BASE_URL ?>fichefrais/<?= $fiche['IDvisiteur'] ?>/<?= $fiche['mois'] ?>/delete">
-                         
-                        <button type="submit">Supprimer</button>
-                    </form>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-    </tbody>
+<tbody>
+
+<?php foreach($fiches as $f): ?>
+
+<tr>
+
+<td><?= htmlspecialchars($f['IDvisiteur'] ?? '') ?></td>
+
+<td>
+
+<?php
+$mois = $f['mois'] ?? '';
+$moisAffichage = substr($mois,4,2).'/'.substr($mois,0,4);
+?>
+
+<?= htmlspecialchars($moisAffichage) ?>
+
+</td>
+
+<td><?= htmlspecialchars($f['nbrJustificatifs'] ?? '') ?></td>
+
+<td><?= htmlspecialchars($f['montantValide'] ?? '') ?> €</td>
+
+<td><?= htmlspecialchars($f['etat'] ?? '') ?></td>
+
+<td>
+
+<a class="button"
+href="<?= BASE_URL ?>fichefrais/<?= $f['IDvisiteur'] ?>/<?= $f['mois'] ?>">
+Voir
+</a>
+
+<a class="button"
+href="<?= BASE_URL ?>fichefrais/<?= $f['IDvisiteur'] ?>/<?= $f['mois'] ?>/update">
+Modifier
+</a>
+
+<form method="post"
+action="<?= BASE_URL ?>fichefrais/<?= $f['IDvisiteur'] ?>/<?= $f['mois'] ?>/delete"
+style="display:inline"
+onsubmit="return confirm('Supprimer cette fiche ?');">
+
+<button type="submit">Supprimer</button>
+
+</form>
+
+</td>
+
+</tr>
+
+<?php endforeach ?>
+
+</tbody>
+
 </table>
-<?php endif; ?>
+
+<?php endif ?>
 
 </body>
 </html>

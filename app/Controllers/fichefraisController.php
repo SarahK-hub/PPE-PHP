@@ -2,72 +2,83 @@
 namespace Controllers;
 
 use Core\Controller;
-use DateTime;
 use Models\fichefrais;
 
-class FicheFraisController extends Controller
+final class fichefraisController extends Controller
 {
-    public function index()
+
+    public function index(): void
     {
-        $model = new FicheFrais();
-        $fiches = $model->getAll();
-        $this->render('fichefrais/index', compact('fiches'));
+        $fiches = fichefrais::findAll();
+
+        $this->render('fichefrais/index', [
+            'title' => 'Liste des fiches de frais',
+            'fiches' => $fiches
+        ]);
     }
 
-    public function create()
+    public function show(string $idVisiteur, string $mois): void
+    {
+        $fiche = fichefrais::findById($idVisiteur, $mois);
+
+        $this->render('fichefrais/show', [
+            'fiche' => $fiche
+        ]);
+    }
+
+    public function create(): void
     {
         $this->render('fichefrais/create');
     }
 
-    public function store()
+    public function store(): void
     {
-        $data = [
-            'idVisiteur' => $_SESSION['user']['id'],
-            'mois' => $_POST['mois'],
-            'nbJustificatifs' => $_POST['nbJustificatifs'],
-            'montantValide' => $_POST['montantValide']
-        ];
+        $IDvisiteur = $_SESSION['uid'];
 
-        $model = new FicheFrais();
+        $mois = $_POST['mois'];
+        $nbrJustificatifs = (int) $_POST['nbrJustificatifs'];
+        $montantValide = (float) $_POST['montantValide'];
 
-        if ($model->create($data)) {
-            header('Location: ' . BASE_URL . 'fichefrais');
-            exit;
-        }
+        fichefrais::create(
+            $IDvisiteur,
+            $mois,
+            $nbrJustificatifs,
+            $montantValide,
+            'CR'
+        );
 
-        die("Impossible de créer la fiche");
+        $this->redirect('./fichefrais');
     }
 
-    public function edit($idVisiteur, $mois)
+    public function update(string $idVisiteur, string $mois): void
     {
-        $model = new FicheFrais();
-        $fiche = $model->find($idVisiteur, $mois);
-        $this->render('fichefrais/edit', compact('fiche'));
+        $fiche = fichefrais::findById($idVisiteur, $mois);
+
+        $this->render('fichefrais/update', [
+            'fiche' => $fiche
+        ]);
     }
 
-    public function update($idVisiteur, $mois)
+    public function save(string $idVisiteur, string $mois): void
     {
-        $data = [
-            'idVisiteur' => $idVisiteur,
-            'mois' => $mois,
-            'nbJustificatifs' => $_POST['nbJustificatifs'],
-            'montantValide' => $_POST['montantValide']
-        ];
+        $nbrJustificatifs = (int) $_POST['nbrJustificatifs'];
+        $montantValide = (float) $_POST['montantValide'];
 
-        $model = new FicheFrais();
-        $model->update($data);
+        fichefrais::update(
+            $idVisiteur,
+            $mois,
+            $nbrJustificatifs,
+            $montantValide,
+            'VA'
+        );
 
-        header('Location: ' . BASE_URL . 'fichefrais');
-        exit;
+        $this->redirect('../../fichefrais');
     }
 
-    public function delete($idVisiteur, $mois)
+    public function delete(string $idVisiteur, string $mois): void
     {
-        $model = new FicheFrais();
-        $model->delete($idVisiteur, $mois);
+        fichefrais::delete($idVisiteur, $mois);
 
-        header('Location: ' . BASE_URL . 'fichefrais');
-        exit;
+        $this->redirect(BASE_URL . 'fichefrais');
     }
 }
-

@@ -1,73 +1,115 @@
 <!doctype html>
 <html lang="fr">
 <head>
-    <!doctype html>
-<html lang="fr">
-<head>
-    <meta charset="utf-8">
-    <title><?= htmlspecialchars($title ?? 'Détail fiche de frais') ?></title>
-    <style>
-body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#f0f2f5;color:#2c3e50;margin:0;padding:0 20px}
+<meta charset="utf-8">
+<title>Détail fiche frais</title>
 
-.topbar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:20px 0}
-.topbar h1{margin:0;font-size:1.8rem;flex:1}
+<style>
 
-a.button,button,input[type=submit]{display:inline-block;padding:10px 16px;border-radius:6px;border:none;background:#3498db;color:#fff;font-weight:bold;cursor:pointer;text-decoration:none;transition:.3s,.2s}
-a.button:hover,button:hover,input[type=submit]:hover{background:#2980b9;transform:translateY(-2px)}
-
-.flash{padding:10px 15px;margin:15px 0;border-radius:6px;font-weight:bold}
-.flash-success{background:#2ecc71;color:#fff}
-.flash-error{background:#e74c3c;color:#fff}
-
-table{width:100%;max-width:1000px;border-collapse:collapse;border-radius:6px;overflow:hidden;box-shadow:0 4px 8px rgba(0,0,0,.05);background:#fff}
-th,td{padding:12px 15px;text-align:left}
-th{background:#3498db;color:#fff;text-transform:uppercase;font-size:.9rem}
-tr:nth-child(even){background:#f2f6fc}
-tr:hover{background:#d6eaf8}
-td a{color:#3498db;font-weight:bold;text-decoration:none}
-td a:hover{text-decoration:underline}
-
-form{max-width:500px;background:#fff;padding:20px;border-radius:6px;box-shadow:0 4px 10px rgba(0,0,0,.05);margin-bottom:30px}
-.field{margin-bottom:15px}
-label{display:block;margin-bottom:5px;font-weight:bold}
-input[type=text],input[type=number],textarea{width:100%;padding:8px 12px;border-radius:6px;border:1px solid #ccc;font-size:1rem;box-sizing:border-box}
-input:focus,textarea:focus{outline:none;border-color:#3498db}
-
-.error{color:#e74c3c;font-size:.9rem;margin-top:4px}
-
-@media(max-width:600px){
-.topbar{flex-direction:column;align-items:flex-start}
-table,th,td{font-size:.9rem}
-input,button,a.button{width:100%;margin-bottom:10px}
-td a{display:inline-block;margin-bottom:5px}
+body{
+font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+background:#f0f2f5;
+padding:20px
 }
+
+.card{
+background:white;
+padding:25px;
+border-radius:8px;
+box-shadow:0 4px 10px rgba(0,0,0,.05);
+max-width:500px
+}
+
+a.button{
+display:inline-block;
+margin-top:15px;
+padding:10px 14px;
+background:#3498db;
+color:white;
+border-radius:6px;
+text-decoration:none
+}
+
+a.button:hover{
+background:#2980b9
+}
+
 </style>
 
-
 </head>
+
 <body>
 
 <h1>Détail de la fiche de frais</h1>
 
-<?php if (!empty($message)): ?>
-    <div class="flash"><?= htmlspecialchars($message) ?></div>
-<?php endif; ?>
+<?php if(empty($fiche)): ?>
 
-<?php if (!empty($fiche)): ?>
-    <div class="card">
-        <p><strong>Mois :</strong> <?= htmlspecialchars($fiche['mois']) ?></p>
-        <p><strong>Justificatifs :</strong> <?= htmlspecialchars($fiche['nbrJustificatifs']) ?></p>
-        <p><strong>Montant validé :</strong> <?= htmlspecialchars($fiche['montantValide']) ?></p>
-        <p><strong>Date modif :</strong> <?= htmlspecialchars($fiche['dateModif']) ?></p>
-        <p><strong>État :</strong> <?= htmlspecialchars($fiche['idEtat']) ?></p>
-        <p><strong>État :</strong> <?= htmlspecialchars($fiche['etat_libelle']) ?></p>
+<p>Fiche introuvable.</p>
 
-    </div>
+<a class="button" href="<?= BASE_URL ?>fichefrais">Retour</a>
 
-    <a class="button" href="<?= BASE_URL ?>fichefrais">⬅ Retour</a>
 <?php else: ?>
-    <p>Fiche introuvable.</p>
-<?php endif; ?>
+
+<div class="card">
+
+<p>
+
+<strong>Visiteur :</strong>
+
+<?= htmlspecialchars($fiche['IDvisiteur'] ?? '') ?>
+
+</p>
+
+<p>
+
+<strong>Mois :</strong>
+
+<?php
+$mois = $fiche['mois'] ?? '';
+$moisAffichage = substr($mois,4,2).'/'.substr($mois,0,4);
+?>
+
+<?= htmlspecialchars($moisAffichage) ?>
+
+</p>
+
+<p>
+
+<strong>Nombre justificatifs :</strong>
+
+<?= htmlspecialchars($fiche['nbrJustificatifs'] ?? '') ?>
+
+</p>
+
+<p>
+
+<strong>Montant validé :</strong>
+
+<?= htmlspecialchars($fiche['montantValide'] ?? '') ?> €
+
+</p>
+
+<p>
+
+<strong>Etat :</strong>
+
+<?= htmlspecialchars($fiche['etat'] ?? '') ?>
+
+</p>
+
+<p>
+
+<strong>Date modification :</strong>
+
+<?= htmlspecialchars($fiche['dateModif'] ?? '') ?>
+
+</p>
+
+</div>
+
+<a class="button" href="<?= BASE_URL ?>fichefrais">Retour à la liste</a>
+
+<?php endif ?>
 
 </body>
 </html>

@@ -186,41 +186,50 @@ if (preg_match('#^/visiteur/([0-9]+)/delete$#', $requestPath, $m)) {
 }
 
 
-// ------------------ Routes frais hors forfait ------------------
-//CREATE
+// ------------------ Routes fichefrais ------------------
+
+// CREATE
 $router->get('/fichefrais/create', [Controllers\fichefraisController::class, 'create']);
 $router->post('/fichefrais/store', [Controllers\fichefraisController::class, 'store']);
 
-//INDEX
+// INDEX
 $router->get('/fichefrais', [Controllers\fichefraisController::class, 'index']);
 $router->get('/fichefrais/', [Controllers\fichefraisController::class, 'index']);
 
-// SHOW et UPDATE fallback manuel
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 
+
 // SHOW
-if (preg_match('#^/fichefrais/([0-9]+)$#', $requestPath, $m)) {
-    (new \Controllers\fichefraisController)->show((int)$m[1]);
+if (preg_match('#^/fichefrais/([a-zA-Z0-9]+)/([0-9]{6})$#', $requestPath, $m)) {
+
+    (new \Controllers\fichefraisController)->show($m[1], $m[2]);
     exit;
+
 }
 
 
 // UPDATE
-if (preg_match('#^/fichefrais/([0-9]+)/update$#', $requestPath, $m)) {
+if (preg_match('#^/fichefrais/([a-zA-Z0-9]+)/([0-9]{6})/update$#', $requestPath, $m)) {
+
     $ctrl = new \Controllers\fichefraisController;
+
     if ($method === 'GET') {
-        $ctrl->update((int)$m[1]);
+        $ctrl->update($m[1], $m[2]);
     } elseif ($method === 'POST') {
-        $ctrl->save((int)$m[1]);
+        $ctrl->save($m[1], $m[2]);
     }
+
     exit;
 }
 
+
 // DELETE
-if (preg_match('#^/fichefrais/([0-9]+)/delete$#', $requestPath, $m)) {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        (new \Controllers\fichefraisController)->delete((int)$m[1]);
+if (preg_match('#^/fichefrais/([a-zA-Z0-9]+)/([0-9]{6})/delete$#', $requestPath, $m)) {
+
+    if ($method === 'POST') {
+        (new \Controllers\fichefraisController)->delete($m[1], $m[2]);
     }
+
     exit;
 }
 
